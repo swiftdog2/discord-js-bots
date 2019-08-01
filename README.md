@@ -1,2 +1,2 @@
 # discord-js-bots
-Various Discord bots written in Node.js
+Various bots written in Node.js using discord.js API
