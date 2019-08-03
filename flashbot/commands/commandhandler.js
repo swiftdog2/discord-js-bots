@@ -5,11 +5,12 @@ module.exports = class CommandHandler {
 		CommandHandler.commandMap = new Object();
 
 		//Add your commands...
-		CommandHandler.addCommand("help", function handle(msg) { msg.reply("Help") });
+		CommandHandler.addCommand("help", require("./help.js"));
 		CommandHandler.addCommand("csv2json", require("./csv2json.js"));
 		CommandHandler.addCommand("guild", require("./guild.js"));
 		CommandHandler.addCommand("roles", require("./roles.js"));
-
+		CommandHandler.addCommand("inline", (msg, args) => { msg.reply("Inline function") });
+		
 		//Printout of how many commands loaded
 		console.log("Loaded " + Object.keys(CommandHandler.commandMap).length + " commands");
 	}
@@ -20,23 +21,25 @@ module.exports = class CommandHandler {
 	}
 	
 	static async handleCommand(msg, args) {
-		if(args.length == 0) {
-			msg.reply("Please see `!flash help`");
-			return;
+		if(args.length > 0) {
+			//Get the command handler class from the first argument
+			var command = CommandHandler.commandMap[args.shift()];
 		}
-		
-		//Get the command handler class
-		let command = CommandHandler.commandMap[args.shift()];
 		
 		//If the command doesn't exist
 		if(!command) {
-			msg.reply("No such command exists! See !flash help");
-			return;
+			//Default to the help menu
+			var command = CommandHandler.commandMap["help"];
 		}
 		
+		//Attempt to handle the command
 		try {
-			//Attempt to handle the command
-			var result = await command.handle(msg, args);
+			if(isClass(command))
+				//If it is a command module, call command.handle()
+				var result = await command.handle(msg, args);
+			else
+				//If it an inline function, run it as is
+				var result = await command(msg, args);
 			
 			//Output the result
 			console.log(result);
@@ -46,3 +49,9 @@ module.exports = class CommandHandler {
 		}
 	}
 };
+
+//ES2015
+
+function isClass(func) {
+	return typeof func === "function" && /^class\s/.test(Function.prototype.toString.call(func));
+}
