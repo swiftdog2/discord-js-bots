@@ -34,8 +34,8 @@ module.exports = class CommandHandler {
 		
 		//Attempt to handle the command
 		try {
-			if(isClass(command))
-				//If it is a command module, call command.handle()
+			if(command.handle)
+				//If it has run prop, it is command module, so call command.handle()
 				var result = await command.handle(msg, args);
 			else
 				//If it an inline function, run it as is
@@ -49,8 +49,3 @@ module.exports = class CommandHandler {
 		}
 	}
 };
-
-//Determines whether a functor is a class
-function isClass(func) {
-	return typeof func === "function" && /^class\s/.test(Function.prototype.toString.call(func));
-}
