@@ -15,6 +15,42 @@ client.on("ready", () => {
 	console.log(name + " loaded successfully.");
 });
 
+//Object with properties {uid : msgAmt}
+msgCache = {};
+
+//Log the message to the cache
+async function logMessage(uid) {
+	return new Promise((resolve, reject) => {
+		let messages = 0;
+
+		//If they're in the cache, get the current #
+		if(msgCache[uid])
+			messages = msgCache[uid];
+
+		//Increment the #
+		msgCache[uid] = messages + 1
+		
+		resolve(JSON.stringify(msgCache));
+	});
+}
+
+async function buildQuery() {
+	//Add the base string for the query
+	let queryString = `INSERT INTO posts (uid, amt) VALUES`
+	
+	Object.keys(msgCache).forEach(key => {
+		//Build the query here... each {uid : amt} is added as new value in query, psuedocode:
+		queryString += ` (${key}, ${msgCache[key]}),`;
+	});
+	
+	//Remove the last comma added
+	queryString = queryString.slice(0, -1);
+	
+	//Then add the finishing touches
+	queryString += ` ON DUPLICATE KEY UPDATE amt=amt+VALUES(amt)`;
+	return queryString;
+}
+
 //Check messages for a specific command
 client.on("message", async msg => {
 	//Ignore messages from bots
@@ -32,6 +68,12 @@ client.on("message", async msg => {
 	str = str.slice(prefix.length + 1);
 	
 	var args = str.split(/\s+/);
+	
+	var log = await logMessage(msg.author.id);
+	msg.channel.send("Log: " + log);
+	var query = await buildQuery();
+	msg.channel.send("Query: ```sql\n" + query + "```");
+	return;
 	
 	if(args.length >= 1) {
 		switch(args[0]) {
