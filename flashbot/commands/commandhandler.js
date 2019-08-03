@@ -50,8 +50,7 @@ module.exports = class CommandHandler {
 	}
 };
 
-//ES2015
-
+//Determines whether a functor is a class
 function isClass(func) {
 	return typeof func === "function" && /^class\s/.test(Function.prototype.toString.call(func));
 }
