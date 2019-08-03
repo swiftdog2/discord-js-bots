@@ -3,6 +3,7 @@ const fs = require("fs");
 
 //Define constants
 const name = "BasicBot";
+const prefix = "!hellothere";
 
 // Create a new client
 const client = new Discord.Client();
@@ -21,9 +22,15 @@ client.on("message", msg => {
 	//Get the input as lowercase
 	str = msg.content.toLowerCase();
 
+	//Input must begin with the required prefix
+	if(!str.startsWith(prefix))
+		return;
+	
+	//Remove the prefix
+	str = str.slice(prefix.length + 1);
+	
 	//Hello there!
-	if (str.startsWith("!hellothere"))
-		msg.reply("General Kenobi");
+	msg.reply("General Kenobi");
 });
 
 //Load the token from file
