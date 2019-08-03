@@ -1,7 +1,7 @@
 const csv = require('csvtojson');
 
-module.exports = class CSV2JSON {
-	static async handle(args) {
+module.exports = class csv2json {
+	static async handle(msg, args) {
 		if(args.length == 0)
 			throw new Error("Requires input file e.g `!flash csv2json <input.csv>`");
 		
