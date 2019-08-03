@@ -1,6 +1,5 @@
 //Required imports
 const Discord = require("discord.js");
-const fetch = require("node-fetch");
 const ytdl = require("ytdl-core");
 const fs = require("fs");
 const ffmpeg = require('fluent-ffmpeg');
