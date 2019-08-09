@@ -5,10 +5,12 @@ module.exports = class CommandHandler {
 		CommandHandler.commandMap = new Object();
 
 		//Add your commands...
-		CommandHandler.addCommand("help", require("./help.js"));
-		CommandHandler.addCommand("csv2json", require("./csv2json.js"));
-		CommandHandler.addCommand("guild", require("./guild.js"));
-		CommandHandler.addCommand("roles", require("./roles.js"));
+		CommandHandler.addCommand("help", require("./Help.js"));
+		CommandHandler.addCommand("csv2json", require("./CSV2JSON.js"));
+		CommandHandler.addCommand("guild", require("./Guild.js"));
+		CommandHandler.addCommand("roles", require("./Roles.js"));
+		CommandHandler.addCommand("ahaa", require("./Ahaa.js"));
+		CommandHandler.addCommand("mysql", require("./MySQL.js"));
 		CommandHandler.addCommand("inline", (msg, args) => { msg.reply("Inline function") });
 		
 		//Printout of how many commands loaded
@@ -40,8 +42,7 @@ module.exports = class CommandHandler {
 			else
 				//If it an inline function, run it as is
 				var result = await command(msg, args);
-			
-			//Output the result
+		
 			console.log(result);
 		} catch (err) {
 			//Catch, and print any errors

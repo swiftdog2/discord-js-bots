@@ -3,7 +3,7 @@ const Discord = require("discord.js");
 const fs = require("fs");
 
 //Required imports
-const CommandHandler = require("./commands/commandhandler.js");
+const CommandHandler = require("./commands/CommandHandler.js");
 
 //Define constants
 const name = "FlashBot";
@@ -43,11 +43,8 @@ client.on("message", async msg => {
 CommandHandler.load();
 
 //Log the bot in with the token from file
-fs.readFile("token.txt", "utf-8", function(err, data) {
+fs.readFile("./config/token.txt", "utf-8", function(err, data) {
 	if(err)
 		console.log(err);
 	client.login(data);
 });
-
-
-
